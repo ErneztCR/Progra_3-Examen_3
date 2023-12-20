@@ -12,7 +12,7 @@ GO
 CREATE TABLE Encuesta (
     EncuestaID INT PRIMARY KEY IDENTITY(1,1),
     Nombre VARCHAR(50) NOT NULL,
-	FechaDeNacimiento DATETIME NOT NULL,
+	FechaDeNacimiento DATE NOT NULL,
     CorreoElectronico VARCHAR(50) NOT NULL
 );
 GO
@@ -24,6 +24,9 @@ CREATE TABLE PartidosPoliticos (
     EncuestaID INT FOREIGN KEY REFERENCES Encuesta(EncuestaID)
 );
 GO
+
+-- INSERT INTO PartidosPoliticos(PLN)
+--PLN, PUSC, PAC
 
 -- STORE PROCEDURE
 
@@ -37,6 +40,20 @@ BEGIN
     INSERT INTO Encuesta(Nombre, FechaDeNacimiento, CorreoElectronico)
     VALUES (@Nombre, @FechaDeNacimiento, @CorreoElectronico);
 END;
+
+CREATE PROCEDURE Reporte
+AS
+BEGIN 
+	SELECT 
+	E.EncuestaID AS 'NUMERO DE ENCUESTA',
+	E.Nombre AS 'NOMBRE',
+	E.FechaDeNacimiento AS 'FECHA',
+	E.CorreoElectronico AS 'CORREO',
+	P.PartidoPolitico AS 'PARTIDO'
+	FROM Encuesta E
+	INNER JOIN PartidoPolitico P ON P.EncuestaID = E.EncuestaID;
+	END
+	GO
 
 EXECUTE AgregarUsuario;
 
